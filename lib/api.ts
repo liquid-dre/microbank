@@ -108,12 +108,22 @@ export const authApi = {
  * 💰 Transactions API
  */
 export const transactionApi = {
-  list: () => api.get<Transaction>('/api/transactions'),
-  deposit: (amount: number) =>
-    api.post<Transaction>('/api/transactions', { type: 'DEPOSIT', amount }, true, 'Deposit successful!'),
-  withdraw: (amount: number) =>
-    api.post<Transaction>('/api/transactions', { type: 'WITHDRAWAL', amount }, true, 'Withdrawal successful!'),
-}
+	list: () => api.get<Transaction>("/api/transactions"),
+	deposit: (amount: number) =>
+		api.post<Transaction>(
+			"/api/transactions",
+			{ type: "DEPOSIT", amount },
+			true,
+			"Deposit successful!"
+		),
+	withdraw: (amount: number) =>
+		api.post<Transaction>(
+			"/api/transactions",
+			{ type: "WITHDRAWAL", amount },
+			true,
+			"Withdrawal successful!"
+		),
+};
 
 /**
  * 🛠️ Admin API
@@ -138,6 +148,7 @@ export type User = {
 	email: string;
 	isAdmin: boolean;
 	isBlacklisted: boolean;
+	avatar?: string | null;
 };
 
 export type Transaction = {
