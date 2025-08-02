@@ -1,102 +1,122 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Mail, Lock, LogIn } from 'lucide-react'
-import { useAuth } from '@/providers/AuthProvider'
-import Link from 'next/link'
+import { useState } from "react";
+import { Mail, Lock, LogIn } from "lucide-react";
+import { useAuth } from "@/providers/AuthProvider";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const { login } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+	const { login, user } = useAuth();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      await login(email, password)
-    } finally {
-      setLoading(false)
-    }
-  }
+	const handleLogin = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setLoading(true);
+		try {
+			await login(email, password);
 
-  return (
-    <div className="relative flex min-h-screen items-center justify-center 
+			// Redirect based on role
+			if (user?.isAdmin) {
+				router.push("/admin/dashboard");
+			} else {
+				router.push("/dashboard");
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div
+			className="relative flex min-h-screen items-center justify-center 
         bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-800 overflow-hidden"
-        >
+		>
+			{/* Animated Background Blobs */}
+			<div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+			<div className="absolute top-40 -right-40 w-[35rem] h-[35rem] bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-2000" />
+			<div className="absolute bottom-0 left-1/2 w-[40rem] h-[40rem] bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000" />
 
-      {/* Animated Background Blobs */}
-          <div className="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
-      <div className="absolute top-40 -right-40 w-[35rem] h-[35rem] bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-2000" />
-      <div className="absolute bottom-0 left-1/2 w-[40rem] h-[40rem] bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000" />
+			{/* Card */}
+			<div
+				className="relative z-10 w-full max-w-md 
+          bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-white/20"
+			>
+				<h1 className="text-2xl font-bold text-[color:var(--color-primary)] text-center mb-6">
+					Welcome Back
+				</h1>
 
-
-      {/* Card */}
-      <div className="relative z-10 w-full max-w-md 
-          bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-white/20">
-        <h1 className="text-2xl font-bold text-[color:var(--color-primary)] text-center mb-6">
-          Welcome Back
-        </h1>
-        
-        <form className="space-y-4" onSubmit={handleLogin}>
-          {/* Email Input */}
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--color-primary)] w-5 h-5" />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 
+				<form className="space-y-4" onSubmit={handleLogin}>
+					{/* Email Input */}
+					<div className="relative">
+						<Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--color-primary)] w-5 h-5" />
+						<input
+							type="email"
+							placeholder="Email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 
                 focus:ring-2 focus:ring-[color:var(--color-primary)] focus:border-[color:var(--color-primary)] 
                 outline-none transition-all"
-              required
-            />
-          </div>
+							required
+						/>
+					</div>
 
-          {/* Password Input */}
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--color-primary)] w-5 h-5" />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 
+					{/* Password Input */}
+					<div className="relative">
+						<Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--color-primary)] w-5 h-5" />
+						<input
+							type="password"
+							placeholder="Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 
                 focus:ring-2 focus:ring-[color:var(--color-primary)] focus:border-[color:var(--color-primary)] 
                 outline-none transition-all"
-              required
-            />
-          </div>
+							required
+						/>
+					</div>
 
-          {/* Login Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary flex items-center justify-center gap-2 w-full"
-          >
-            {loading ? 'Logging in...' : (
-              <>
-                <LogIn className="w-5 h-5" />
-                Login
-              </>
-            )}
-          </button>
-        </form>
+					{/* Login Button */}
+					<button
+						type="submit"
+						disabled={loading}
+						className="btn-primary flex items-center justify-center gap-2 w-full"
+					>
+						{loading ? (
+							"Logging in..."
+						) : (
+							<>
+								<LogIn className="w-5 h-5" />
+								Login
+							</>
+						)}
+					</button>
 
-        <p className="text-center text-gray-700 mt-4">
-          Don&apos;t have an account?{' '}
-          <Link
-            href="/register"
-            className="relative inline-block text-[color:var(--color-accent)] font-medium group"
-          >
-            Register here
-            <span className="absolute left-0 -bottom-0.5 w-0 h-0.5 
-              bg-[color:var(--color-accent)] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-        </p>
-      </div>
-    </div>
-  )
+					{/* Bottom Links */}
+					<div className="flex justify-between text-sm mt-2">
+						<Link
+							href="/register"
+							className="relative inline-block text-[color:var(--color-accent)] font-medium group"
+						>
+							Register here
+							<span
+								className="absolute left-0 -bottom-0.5 w-0 h-0.5 
+                bg-[color:var(--color-accent)] transition-all duration-300 group-hover:w-full"
+							></span>
+						</Link>
+						<Link
+							href="/reset-password"
+							className="text-[color:var(--color-primary)] hover:underline"
+						>
+							Forgot Password?
+						</Link>
+					</div>
+				</form>
+			</div>
+		</div>
+	);
 }
