@@ -110,9 +110,9 @@ export const authApi = {
 export const transactionApi = {
   list: () => api.get<Transaction>('/api/transactions'),
   deposit: (amount: number) =>
-    api.post<Transaction>('/api/transactions', { type: 'deposit', amount }, true, 'Deposit successful!'),
+    api.post<Transaction>('/api/transactions', { type: 'DEPOSIT', amount }, true, 'Deposit successful!'),
   withdraw: (amount: number) =>
-    api.post<Transaction>('/api/transactions', { type: 'withdraw', amount }, true, 'Withdrawal successful!'),
+    api.post<Transaction>('/api/transactions', { type: 'WITHDRAWAL', amount }, true, 'Withdrawal successful!'),
 }
 
 /**
@@ -143,7 +143,7 @@ export type User = {
 export type Transaction = {
 	id: string;
 	userId: string;
-	type: "deposit" | "withdraw";
+	type: "DEPOSIT" | "WITHDRAWAL";
 	amount: number;
 	createdAt: string;
 	balance: number;
