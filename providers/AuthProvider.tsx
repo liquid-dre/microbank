@@ -8,7 +8,7 @@ type AuthContextType = {
 	user: User | null;
 	token: string | null;
 	loading: boolean;
-	login: (email: string, password: string) => Promise<void>;
+	login: (email: string, password: string) => Promise<User>;
 	register: (name: string, email: string, password: string) => Promise<void>;
 	logout: () => void;
 	refreshProfile: () => Promise<void>;
@@ -57,10 +57,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			localStorage.setItem("token", token);
 			setToken(token);
 
+			document.cookie = `token=${token}; path=/; max-age=86400;`;
+
 			await refreshProfile();
+			const storedUser = JSON.parse(localStorage.getItem("user")!);
 			toast.success("Welcome back!");
+			return storedUser; // 🔹 Return the user
 		} catch (err: any) {
-			toast.error(err.message || "Invalid credentials");
+			// toast.error(err.message || "Invalid credentials");
 			throw err;
 		}
 	};

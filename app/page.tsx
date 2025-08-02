@@ -17,10 +17,10 @@ export default function LoginPage() {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			await login(email, password);
+			const loggedInUser = await login(email, password);
 
 			// Redirect based on role
-			if (user?.isAdmin) {
+			if (loggedInUser?.isAdmin) {
 				router.push("/admin/dashboard");
 			} else {
 				router.push("/dashboard");
