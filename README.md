@@ -57,7 +57,7 @@ microbank/
 
 ### Tech Stack
 
-	•	Frontend: Next.js 14, React, Tailwind CSS (if used)
+	•	Frontend: Next.js 14, React, Tailwind CSS
 	•	Backend: Next.js API Routes
 	•	Database: Supabase (PostgreSQL with Prisma)
 	•	Authentication: JSON Web Tokens (JWT)
