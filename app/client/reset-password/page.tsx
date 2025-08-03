@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Mail, Send } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import SkeletonBlock from "@/components/layout/SkeletonBlock";
 
 export default function ResetPasswordPage() {
 	const [loading, setLoading] = useState(false);
