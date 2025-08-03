@@ -250,7 +250,27 @@ export default function WithdrawPage() {
 					whileHover={{ scale: 1.02 }}
 					whileTap={{ scale: 0.98 }}
 				>
-					{loading ? "Processing..." : "Withdraw"}
+					{loading ? (
+						<div className="flex items-center gap-2 font-medium">
+							<span>Processing</span>
+							<div className="flex items-end h-4">
+								{[0, 1, 2].map((i) => (
+									<motion.span
+										key={i}
+										className="mx-0.5 w-1 h-1 bg-white rounded-full"
+										animate={{ y: [0, -6, 0] }}
+										transition={{
+											repeat: Infinity,
+											duration: 0.6,
+											delay: i * 0.2,
+										}}
+									/>
+								))}
+							</div>
+						</div>
+					) : (
+						"Withdraw"
+					)}
 				</motion.button>
 			</form>
 

@@ -213,7 +213,27 @@ export default function DepositPage() {
 					whileHover={{ scale: 1.03 }}
 					whileTap={{ scale: 0.97 }}
 				>
-					{loading ? "Processing..." : "Deposit"}
+					{loading ? (
+						<div className="flex items-center gap-2 font-medium">
+							<span>Processing</span>
+							<div className="flex items-end h-4">
+								{[0, 1, 2].map((i) => (
+									<motion.span
+										key={i}
+										className="mx-0.5 w-1 h-1 bg-white rounded-full"
+										animate={{ y: [0, -6, 0] }}
+										transition={{
+											repeat: Infinity,
+											duration: 0.6,
+											delay: i * 0.2,
+										}}
+									/>
+								))}
+							</div>
+						</div>
+					) : (
+						"Deposit"
+					)}
 				</motion.button>
 			</form>
 

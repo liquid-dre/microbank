@@ -5,6 +5,7 @@ import { Mail, Lock, LogIn } from "lucide-react";
 import { useAuth } from "@/app/client/providers/AuthProvider";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
 	const { login } = useAuth();
@@ -87,7 +88,23 @@ export default function LoginPage() {
 						className="btn-primary flex items-center justify-center gap-2 w-full"
 					>
 						{loading ? (
-							"Logging in..."
+							<div className="flex items-center gap-2 font-medium">
+								<span>Logging In</span>
+								<div className="flex items-end h-4">
+									{[0, 1, 2].map((i) => (
+										<motion.span
+											key={i}
+											className="mx-0.5 w-1 h-1 bg-white rounded-full"
+											animate={{ y: [0, -6, 0] }}
+											transition={{
+												repeat: Infinity,
+												duration: 0.6,
+												delay: i * 0.2,
+											}}
+										/>
+									))}
+								</div>
+							</div>
 						) : (
 							<>
 								<LogIn className="w-5 h-5" />
@@ -107,12 +124,6 @@ export default function LoginPage() {
 								className="absolute left-0 -bottom-0.5 w-0 h-0.5 
                 bg-[color:var(--color-accent)] transition-all duration-300 group-hover:w-full"
 							></span>
-						</Link>
-						<Link
-							href="/client/reset-password"
-							className="text-[color:var(--color-primary)] hover:underline"
-						>
-							Forgot Password?
 						</Link>
 					</div>
 				</form>

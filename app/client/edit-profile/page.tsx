@@ -134,7 +134,27 @@ export default function EditProfilePage() {
 					disabled={loading}
 					className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white transition-colors"
 				>
-					{loading ? "Saving..." : "Save Changes"}
+					{loading ? (
+						<div className="flex items-center gap-2 font-medium">
+							<span>Saving</span>
+							<div className="flex items-end h-4">
+								{[0, 1, 2].map((i) => (
+									<motion.span
+										key={i}
+										className="mx-0.5 w-1 h-1 bg-white rounded-full"
+										animate={{ y: [0, -6, 0] }}
+										transition={{
+											repeat: Infinity,
+											duration: 0.6,
+											delay: i * 0.2,
+										}}
+									/>
+								))}
+							</div>
+						</div>
+					) : (
+						"Save Changes"
+					)}
 				</Button>
 			</div>
 		</div>
