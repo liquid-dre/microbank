@@ -59,6 +59,11 @@ function AccordionItem({ item }: { item: (typeof faqData)[0] }) {
 
 export default function LandingPage() {
 	const { user } = useAuth();
+	const destination = !user
+		? "/client/register"
+		: user.isAdmin
+			? "/client/admin/dashboard"
+			: "/client/dashboard";
 
 	return (
 		<div className="bg-[var(--color-cream)] text-gray-800">
@@ -88,7 +93,7 @@ export default function LandingPage() {
 						transition={{ delay: 1, duration: 0.6 }}
 					>
 						<Link
-							href={user ? "/client/dashboard" : "/client/register"}
+							href={destination}
 							className="inline-block px-8 py-4 bg-[var(--color-accent)] text-white font-semibold rounded-full shadow-lg hover:bg-opacity-90 
       transition relative 
       ring-2 ring-[var(--color-accent)] ring-offset-2
