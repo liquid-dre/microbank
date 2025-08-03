@@ -8,6 +8,9 @@ import {
 	ArrowUpCircle,
 	Check,
 	ChevronsUpDown,
+	Info,
+	TrendingDown,
+	TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -37,6 +40,7 @@ import {
 	Tooltip,
 	ResponsiveContainer,
 } from "recharts";
+import { motion } from "framer-motion";
 
 export default function ClientDashboard() {
 	const { user } = useAuth();
@@ -107,6 +111,66 @@ export default function ClientDashboard() {
 		return Object.values(grouped);
 	}, [transactions]);
 
+	const getGreeting = () => {
+		const hour = new Date().getHours();
+		if (hour < 12) return "Good morning";
+		if (hour < 18) return "Good afternoon";
+		return "Good evening";
+	};
+
+	// Calculate last 7 days net trend
+	const net7DayTrend = useMemo(() => {
+		const now = new Date();
+		const sevenDaysAgo = new Date();
+		sevenDaysAgo.setDate(now.getDate() - 7);
+
+		let totalDeposits = 0;
+		let totalWithdrawals = 0;
+
+		transactions.forEach((t) => {
+			const txDate = new Date(t.createdAt);
+			if (txDate >= sevenDaysAgo) {
+				if (t.type === "DEPOSIT") totalDeposits += t.amount;
+				else if (t.type === "WITHDRAWAL") totalWithdrawals += t.amount;
+			}
+		});
+
+		return totalDeposits - totalWithdrawals; // net trend
+	}, [transactions]);
+
+	// Calculate monthly deposits vs withdrawals
+	const monthlyStats = useMemo(() => {
+		const now = new Date();
+		const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+		let deposits = 0;
+		let withdrawals = 0;
+
+		transactions.forEach((t) => {
+			const txDate = new Date(t.createdAt);
+			if (txDate >= startOfMonth) {
+				if (t.type === "DEPOSIT") deposits += t.amount;
+				else if (t.type === "WITHDRAWAL") withdrawals += t.amount;
+			}
+		});
+
+		return { deposits, withdrawals };
+	}, [transactions]);
+
+	// Personalized summary message
+	const summaryMessage = useMemo(() => {
+		const difference = Math.abs(
+			monthlyStats.deposits - monthlyStats.withdrawals
+		).toFixed(2);
+		if (monthlyStats.deposits > monthlyStats.withdrawals) {
+			return `Fantastic! You saved ${difference} more than you spent this month. Keep building on this momentum!`;
+		} else if (monthlyStats.deposits === monthlyStats.withdrawals) {
+			return `You’re perfectly balanced this month with ${monthlyStats.deposits.toFixed(2)} in both spending and savings. Try tucking away just a bit more to grow your cushion.`;
+		} else {
+			return `You spent ${difference} more than you saved this month. Small tweaks—like cutting one extra coffee—can help boost your savings!`;
+		}
+	}, [monthlyStats]);
+
 	return (
 		<div
 			className="min-h-screen p-6"
@@ -116,17 +180,18 @@ export default function ClientDashboard() {
 				className="text-2xl font-bold mb-6"
 				style={{ color: "var(--color-primary)" }}
 			>
-				Welcome back{user?.name ? `, ${user.name}` : ""}! 👋
+				{getGreeting()}
+				{user?.name ? `, ${user.name}` : ""}! 👋
 			</h1>
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 				{/* Account Balance Card */}
-				<div
-					className="p-6 rounded-xl shadow border"
-					style={{
-						backgroundColor: "white",
-						borderColor: "rgba(0,0,0,0.05)",
-					}}
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4, ease: "easeOut" }}
+					whileHover={{ scale: 1.02 }}
+					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
 				>
 					{loading ? (
 						<div
@@ -144,15 +209,15 @@ export default function ClientDashboard() {
 							</p>
 						</>
 					)}
-				</div>
+				</motion.div>
 
 				{/* Quick Actions */}
-				<div
-					className="p-6 rounded-xl shadow border flex flex-col gap-4 justify-center"
-					style={{
-						backgroundColor: "white",
-						borderColor: "rgba(0,0,0,0.05)",
-					}}
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4, ease: "easeOut" }}
+					whileHover={{ scale: 1.02 }}
+					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
 				>
 					<h2
 						className="font-semibold"
@@ -180,19 +245,117 @@ export default function ClientDashboard() {
 							<ArrowUpCircle className="w-5 h-5" /> Withdraw
 						</Link>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* Blacklisted Card */}
 				{isBlacklisted && (
-					<div
-						className="p-6 rounded-xl bg-black shadow border flex flex-col items-center justify-center"
-					>
-						<p className="text-red-600 text-xl font-bold">Blacklisted</p>
+					<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4, ease: "easeOut" }}
+					whileHover={{ scale: 1.02 }}
+					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
+				><p className="text-red-600 text-xl font-bold">Blacklisted</p>
 						<p className="text-gray-100 text-sm mt-2 text-center">
 							Your account is currently restricted from making transactions.
 						</p>
-					</div>
+					</motion.div>
 				)}
+
+				{/* Net 7 Day Trend */}
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4 }}
+					className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col gap-4"
+				>
+					{/* Label */}
+					<p className="text-xs font-semibold text-gray-600 uppercase">
+						Net 7-Day Trend
+					</p>
+
+					{/* Value + Icon */}
+					<div className="flex items-center mt-2 gap-2">
+						{net7DayTrend >= 0 ? (
+							<TrendingUp
+								className="w-5 h-5 text-green-600"
+								aria-label="Upward trend"
+							/>
+						) : (
+							<TrendingDown
+								className="w-5 h-5 text-red-600"
+								aria-label="Downward trend"
+							/>
+						)}
+						<span
+							className={`text-2xl font-bold ${
+								net7DayTrend >= 0 ? "text-green-600" : "text-red-600"
+							}`}
+						>
+							{net7DayTrend >= 0 ? "+" : "-"}$
+							{Math.abs(net7DayTrend).toFixed(2)}
+						</span>
+					</div>
+				</motion.div>
+
+				{/* Monthly Deposits vs Withdrawals */}
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4 }}
+					className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col gap-4"
+				>
+					{/* Header */}
+					<div className="flex items-center justify-between">
+						<h3 className="text-sm font-semibold text-gray-600 uppercase">
+							Monthly Deposits vs Withdrawals
+						</h3>
+					</div>
+
+					{/* Stats */}
+					<div className="grid grid-cols-2 gap-6">
+						<div className="flex items-center gap-3">
+							<span className="block w-3 h-3 rounded-full bg-green-500" />
+							<div>
+								<p className="text-xs text-gray-500">Deposits</p>
+								<p className="text-xl font-bold text-green-600">
+									${monthlyStats.deposits.toFixed(2)}
+								</p>
+							</div>
+						</div>
+						<div className="flex items-center gap-3">
+							<span className="block w-3 h-3 rounded-full bg-red-500" />
+							<div>
+								<p className="text-xs text-gray-500">Withdrawals</p>
+								<p className="text-xl font-bold text-red-600">
+									${monthlyStats.withdrawals.toFixed(2)}
+								</p>
+							</div>
+						</div>
+					</div>
+				</motion.div>
+
+				{/* Personalized Summary */}
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4, ease: "easeOut" }}
+					whileHover={{ scale: 1.02 }}
+					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
+				>
+					{/* Header */}
+					<div className="flex items-center gap-2 mb-2 pl-3">
+						<Info className="w-5 h-5 text-blue-500" aria-hidden="true" />
+						<p className="text-gray-600 font-semibold uppercase text-sm">
+							Personalized Summary
+						</p>
+					</div>
+
+					{/* Message */}
+					<p className="text-gray-700 text-sm leading-relaxed pl-3">
+						{summaryMessage}
+					</p>
+				</motion.div>
 			</div>
 
 			{/* Area Chart */}
