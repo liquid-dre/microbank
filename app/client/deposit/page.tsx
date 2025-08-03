@@ -208,7 +208,8 @@ export default function DepositPage() {
 				<motion.button
 					type="submit"
 					disabled={loading || invalid}
-					className="w-full py-3 rounded-lg text-white font-semibold disabled:opacity-50"
+					className="w-full py-3 rounded-lg text-white font-semibold disabled:opacity-50
+					flex justify-center items-center"
 					style={{ backgroundColor: "var(--color-primary)" }}
 					whileHover={{ scale: 1.03 }}
 					whileTap={{ scale: 0.97 }}

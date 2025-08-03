@@ -132,7 +132,8 @@ export default function EditProfilePage() {
 				<Button
 					onClick={handleSave}
 					disabled={loading}
-					className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white transition-colors"
+					className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white transition-colors
+					flex justify-center items-center"
 				>
 					{loading ? (
 						<div className="flex items-center gap-2 font-medium">

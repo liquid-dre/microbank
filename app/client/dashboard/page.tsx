@@ -220,26 +220,28 @@ export default function ClientDashboard() {
 					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
 				>
 					<h2
-						className="font-semibold"
+						className="font-semibold mb-4"
 						style={{ color: "var(--color-primary)" }}
 					>
 						Quick Actions
 					</h2>
-					<div className="flex gap-4">
+
+					<div className="flex flex-wrap sm:flex-nowrap gap-4 w-full">
+						{/* Deposit Button */}
 						<Link
 							href="/client/deposit"
-							className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white transition ${
-								isBlacklisted ? "opacity-50 pointer-events-none" : ""
-							}`}
+							className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition text-center
+        ${isBlacklisted ? "opacity-50 pointer-events-none" : ""}`}
 							style={{ backgroundColor: "var(--color-primary)" }}
 						>
 							<ArrowDownCircle className="w-5 h-5" /> Deposit
 						</Link>
+
+						{/* Withdraw Button */}
 						<Link
 							href="/client/withdraw"
-							className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white transition ${
-								isBlacklisted ? "opacity-50 pointer-events-none" : ""
-							}`}
+							className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition text-center
+        ${isBlacklisted ? "opacity-50 pointer-events-none" : ""}`}
 							style={{ backgroundColor: "var(--color-accent)" }}
 						>
 							<ArrowUpCircle className="w-5 h-5" /> Withdraw
@@ -250,12 +252,13 @@ export default function ClientDashboard() {
 				{/* Blacklisted Card */}
 				{isBlacklisted && (
 					<motion.div
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.4, ease: "easeOut" }}
-					whileHover={{ scale: 1.02 }}
-					className="relative p-6 bg-black border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
-				><p className="text-red-600 text-xl font-bold">Blacklisted</p>
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4, ease: "easeOut" }}
+						whileHover={{ scale: 1.02 }}
+						className="relative p-6 bg-black border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
+					>
+						<p className="text-red-600 text-xl font-bold">Blacklisted</p>
 						<p className="text-gray-100 text-sm mt-2 text-center">
 							Your account is currently restricted from making transactions.
 						</p>
