@@ -14,23 +14,9 @@ export default function DepositPage() {
 	const [loadingBalance, setLoadingBalance] = useState(true);
 	const [success, setSuccess] = useState(false);
 
-	const bgRef = useRef<HTMLDivElement>(null);
 	const cardRef = useRef<HTMLFormElement>(null);
 	const successRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
-
-	// Animate background gradient
-	useEffect(() => {
-		if (bgRef.current) {
-			const tl = gsap.timeline({ repeat: -1, yoyo: true });
-			tl.to(bgRef.current, { backgroundColor: "#E8F5E9", duration: 4 });
-			tl.to(bgRef.current, { backgroundColor: "#FFF3E0", duration: 4 });
-			tl.to(bgRef.current, {
-				backgroundColor: "var(--color-cream)",
-				duration: 4,
-			});
-		}
-	}, []);
 
 	// Fetch current balance
 	useEffect(() => {
@@ -77,15 +63,69 @@ export default function DepositPage() {
 
 	const invalid = !amount || amount <= 0;
 	const amt = typeof amount === "number" ? amount : 0;
-	// Preview percent: 0 when amt=0, full at 1000+
 	const percent = amt > 0 ? Math.min((amt / 1000) * 100, 100) : 0;
 
 	return (
-		<div
-			ref={bgRef}
-			className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden"
-			style={{ backgroundColor: "var(--color-cream)" }}
-		>
+		<div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[var(--color-cream)]">
+			{/* 🌟 Animated Blobs Background */}
+			<motion.div
+				className="absolute top-0 left-1/4 w-52 h-52 bg-[var(--color-primary)] opacity-20 rounded-full"
+				animate={{ x: [0, 120, -50, 0], y: [0, 80, -40, 0] }}
+				transition={{
+					duration: 8,
+					repeat: Infinity,
+					repeatType: "mirror",
+					ease: "easeInOut",
+				}}
+			>
+				{/* Orbit container */}
+				<motion.div
+					className="absolute inset-0 flex items-center justify-center"
+					animate={{ rotate: 360 }}
+					transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+				>
+					{/* Orbiting circles */}
+					<div className="absolute w-3 h-3 bg-[var(--color-accent)] rounded-full -top-8" />
+					<div className="absolute w-2.5 h-2.5 bg-[var(--color-primary-dark,#1B5E20)] rounded-full top-12 right-12" />
+					<div className="absolute w-2 h-2 bg-[var(--color-accent)] rounded-full bottom-8" />
+					<div className="absolute w-2.5 h-2.5 bg-[var(--color-primary-dark,#1B5E20)] rounded-full -left-8" />
+					<div className="absolute w-2 h-2 bg-[var(--color-accent)] rounded-full top-0 right-16" />
+					<div className="absolute w-1.5 h-1.5 bg-[var(--color-primary-dark,#1B5E20)] rounded-full bottom-0 left-12" />
+					<div className="absolute w-2 h-2 bg-[var(--color-accent)] rounded-full top-8 left-10" />
+					<div className="absolute w-2 h-2 bg-[var(--color-primary-dark,#1B5E20)] rounded-full bottom-6 right-10" />
+				</motion.div>
+			</motion.div>
+			<motion.div
+				className="absolute bottom-0 right-8 w-72 h-72 bg-gradient-to-br from-[var(--color-accent)] to-transparent opacity-25 rounded-full"
+				animate={{ scale: [1, 1.1, 1], x: [0, -60, 0], y: [0, -40, 0] }}
+				transition={{ duration: 9, repeat: Infinity, repeatType: "mirror" }}
+			/>
+			<motion.div
+				className="absolute bottom-24 right-16 w-5 h-5 bg-[var(--color-primary)] opacity-40 rounded-full"
+				animate={{ y: [0, -10, 0], x: [0, 10, 0] }}
+				transition={{ duration: 5, repeat: Infinity, repeatType: "mirror" }}
+			/>
+			<motion.div
+				className="absolute bottom-12 right-32 w-7 h-7 bg-[var(--color-accent)] opacity-30 rounded-full"
+				animate={{ y: [0, -8, 0], x: [0, -8, 0] }}
+				transition={{ duration: 6, repeat: Infinity, repeatType: "mirror" }}
+			/>
+			<motion.div
+				className="absolute bottom-32 right-8 w-4 h-4 bg-[var(--color-primary)] opacity-50 rounded-full"
+				animate={{ y: [0, -6, 0], x: [0, 6, 0] }}
+				transition={{ duration: 4, repeat: Infinity, repeatType: "mirror" }}
+			/>
+			<motion.div
+				className="absolute inset-0 flex items-center justify-center pointer-events-none"
+				initial={{ rotate: 0 }}
+				animate={{ rotate: 360 }}
+				transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+			>
+				<div className="w-80 h-80 border-[2px] border-[var(--color-primary)] rounded-full opacity-10" />
+				<div className="w-56 h-56 border-[2px] border-[var(--color-accent)] rounded-full opacity-10 absolute" />
+			</motion.div>
+
+			{/* Deposit Card */}
 			<form
 				ref={cardRef}
 				onSubmit={handleDeposit}
@@ -125,11 +165,13 @@ export default function DepositPage() {
 								key={val}
 								type="button"
 								onClick={() => setAmount(val)}
-								className="flex-1 py-2 rounded-lg font-medium text-sm"
-								style={{
-									backgroundColor: "var(--color-primary)",
-									color: "white",
-								}}
+								className={`flex-1 py-1 rounded-lg font-medium text-sm transition-colors duration-200
+    ${
+			val === 1000
+				? "bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] hover:text-white"
+				: "bg-[rgba(0,0,0,0.05)] text-black hover:bg-[var(--color-accent)] hover:text-white"
+		}
+  `}
 							>
 								+${val}
 							</button>
