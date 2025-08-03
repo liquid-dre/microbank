@@ -1,4 +1,3 @@
-// app/api/auth/update/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { verify } from "jsonwebtoken";

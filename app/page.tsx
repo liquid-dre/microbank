@@ -6,7 +6,6 @@ import Link from "next/link";
 import { BarChart2, LifeBuoy, Shield, SlashIcon } from "lucide-react";
 import { useAuth } from "./client/providers/AuthProvider";
 
-// Sample FAQ data
 const faqData = [
 	{
 		question: "Is Microbank really free to use?",

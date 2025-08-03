@@ -25,7 +25,6 @@ export default function RegisterPage() {
 			setLoading(true);
 			await authApi.register(name, email, password);
 
-			// ✅ Auto-login after registration
 			await login(email, password);
 
 			toast.success("Registration successful! Redirecting...");

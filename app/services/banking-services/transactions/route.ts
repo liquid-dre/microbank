@@ -1,4 +1,3 @@
-// services/banking-service/transactions/route.ts
 import { cookies } from "next/headers";
 import { verify, JwtPayload } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,7 +7,6 @@ import {
 	createTransaction,
 } from "./services";
 
-// Define a custom payload type for JWT
 interface AuthPayload extends JwtPayload {
 	id: string;
 }

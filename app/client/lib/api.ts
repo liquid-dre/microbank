@@ -170,6 +170,6 @@ export const transactionApi = {
 };
 
 /**
- * ✅ Re-export types for legacy imports
+ * Re-export types for legacy imports
  */
 export type { User, Transaction, BalanceResponse, TransactionResponse };

@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-// 🔹 In-memory rate-limit store
+// In-memory rate-limit store
 const rateLimitStore = new Map<
   string,
   { count: number; lastRequest: number }
 >();
 
-// 🔹 Configurable limits
+// Configurable limits
 const WINDOW_MS = 60_000; // 1 minute
 const MAX_REQUESTS = 10; // 10 requests/minute
 
-// 🔹 Helper: Get IP safely
+// Helper: Get IP safely
 function getClientIp(request: NextRequest): string {
   return (
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
   const ip = getClientIp(request);
   const now = Date.now();
 
-  // ✅ Rate limit logic
+  // Rate limit logic
   const record = rateLimitStore.get(ip) || { count: 0, lastRequest: now };
 
   // Reset if time window passed
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
   record.lastRequest = now;
   rateLimitStore.set(ip, record);
 
-  // ✅ Check if limit exceeded
+  // Check if limit exceeded
   if (record.count > MAX_REQUESTS) {
     return NextResponse.json(
       {
@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  // 🔹 Authentication check
+  // Authentication check
   const token = request.cookies.get("token")?.value;
   if (!token) return NextResponse.redirect(new URL("/client/login", request.url));
 

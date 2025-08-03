@@ -42,11 +42,9 @@ export default function DepositPage() {
 			await transactionApi.deposit(Number(amount));
 			setSuccess(true);
 
-			// shrink card
 			if (cardRef.current) {
 				gsap.to(cardRef.current, { opacity: 0, scale: 0.8, duration: 0.5 });
 			}
-			// success message
 			if (successRef.current) {
 				gsap.fromTo(
 					successRef.current,
@@ -54,7 +52,6 @@ export default function DepositPage() {
 					{ scale: 1, opacity: 1, duration: 0.6, ease: "bounce.out" }
 				);
 			}
-			// redirect
 			setTimeout(() => router.push("/client/dashboard"), 1400);
 		} finally {
 			setLoading(false);

@@ -19,7 +19,6 @@ export default function WithdrawPage() {
 	const cardRef = useRef<HTMLFormElement>(null);
 	const successRef = useRef<HTMLDivElement>(null);
 
-	// Background color animation
 	useEffect(() => {
 		if (bgRef.current) {
 			const tl = gsap.timeline({ repeat: -1, yoyo: true });
@@ -56,7 +55,6 @@ export default function WithdrawPage() {
 			await transactionApi.withdraw(Number(amount));
 			setSuccess(true);
 
-			// Animate card shrinking
 			if (cardRef.current) {
 				gsap.to(cardRef.current, { opacity: 0, scale: 0.8, duration: 0.6 });
 			}
@@ -70,7 +68,6 @@ export default function WithdrawPage() {
 				);
 			}
 
-			// Redirect after animation
 			setTimeout(() => {
 				router.push("/client/dashboard");
 			}, 1500);

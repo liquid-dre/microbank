@@ -14,7 +14,6 @@ export default function ResetPasswordPage() {
 
 		try {
 			setLoading(true);
-			// Simulate request
 			await new Promise((res) => setTimeout(res, 1500));
 			toast.success("Password reset link sent to your email!");
 		} catch {

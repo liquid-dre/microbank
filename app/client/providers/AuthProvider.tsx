@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			await refreshProfile();
 			const storedUser = JSON.parse(localStorage.getItem("user")!);
 			toast.success("Welcome back!");
-			return storedUser; // 🔹 Return the user
+			return storedUser; 
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				toast.error(err.message || "Failed to login");

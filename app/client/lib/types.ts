@@ -1,5 +1,3 @@
-// client/lib/types.ts
-
 export type User = {
   id: string;
   name: string;
@@ -13,7 +11,7 @@ export type TransactionType = 'DEPOSIT' | 'WITHDRAWAL';
 
 export type Transaction = {
   id: string;
-  clientId: string;  // ✅ changed to match backend
+  clientId: string;  
   type: TransactionType;
   amount: number;
   createdAt: string;
