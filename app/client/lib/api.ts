@@ -86,6 +86,19 @@ export const api = {
 			successMessage
 		),
 
+	patch: <TResponse, TBody extends object>(
+		url: string,
+		body: TBody,
+		showToast = false,
+		successMessage?: string
+	) =>
+		request<TResponse>(
+			url,
+			{ method: "PATCH", body: JSON.stringify(body) },
+			showToast,
+			successMessage
+		),
+
 	delete: <T>(url: string, showToast = false, successMessage?: string) =>
 		request<T>(url, { method: "DELETE" }, showToast, successMessage),
 };
@@ -120,6 +133,13 @@ export const adminApi = {
 	listClients: () => api.get<User[]>("/services/client-services/admin/clients"),
 	toggleBlacklist: async (clientId: string) => {
 		const res = await api.post<
+			{ success: boolean; updated: User },
+			{ clientId: string }
+		>("/services/client-services/admin/clients", { clientId });
+		return res.updated;
+	},
+	toggleAdmin: async (clientId: string) => {
+		const res = await api.patch<
 			{ success: boolean; updated: User },
 			{ clientId: string }
 		>("/services/client-services/admin/clients", { clientId });

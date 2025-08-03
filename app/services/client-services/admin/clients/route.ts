@@ -31,6 +31,7 @@ export async function GET() {
 				email: true,
 				isBlacklisted: true,
 				createdAt: true,
+				isAdmin:true,
 			},
 		});
 
@@ -67,6 +68,44 @@ export async function POST(req: NextRequest) {
 		const updated = await prisma.client.update({
 			where: { id: clientId },
 			data: { isBlacklisted: !client.isBlacklisted },
+		});
+
+		return NextResponse.json({ success: true, updated });
+	} catch (err) {
+		console.error(err);
+		return NextResponse.json(
+			{ error: "Invalid token or server error" },
+			{ status: 500 }
+		);
+	}
+}
+
+export async function PATCH(req: NextRequest) {
+	const token = (await cookies()).get("token")?.value;
+	if (!token)
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+	try {
+		const payload = verify(token, process.env.JWT_SECRET!) as JwtPayload;
+		const admin = await prisma.client.findUnique({ where: { id: payload.id } });
+
+		if (!admin?.isAdmin)
+			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+		const { clientId } = await req.json();
+		if (!clientId)
+			return NextResponse.json(
+				{ error: "Client ID is required" },
+				{ status: 400 }
+			);
+
+		const client = await prisma.client.findUnique({ where: { id: clientId } });
+		if (!client)
+			return NextResponse.json({ error: "Client not found" }, { status: 404 });
+
+		const updated = await prisma.client.update({
+			where: { id: clientId },
+			data: { isAdmin: !client.isAdmin },
 		});
 
 		return NextResponse.json({ success: true, updated });

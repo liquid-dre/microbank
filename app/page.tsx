@@ -68,7 +68,7 @@ export default function LandingPage() {
 	return (
 		<div className="bg-[var(--color-cream)] text-gray-800">
 			{/* Hero Section */}
-			<section className="relative h-screen flex items-c overflow-hidden pt-20 pb-36">
+			<section className="relative h-screen flex items-center overflow-hidden pt-20 pb-36">
 				<div className="max-w-3xl mx-auto px-6 text-center ">
 					<motion.h1
 						initial={{ y: -20, opacity: 0 }}
