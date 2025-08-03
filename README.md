@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 A full-stack microbanking platform built with Next.js, Prisma, Supabase, and JWT.
 Allows secure client registration, deposits, withdrawals, and blacklist management with a clean admin panel and Swagger API documentation.
 
-🌐 Live Demo: [Microbank on Vercel](https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/)
+🌐 Live Demo: [Microbank on Vercel](https://microbank-chi.vercel.app/)
 💻 Source Code: [GitHub Repo](https://github.com/liquid-dre/microbank.git)
 
 ### Getting Started
@@ -111,9 +111,9 @@ Visit → [localhost](http://localhost:3001)
 
 Interactive Swagger docs:
 ```
-    https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/api/docs
+    https://microbank-chi.vercel.app/api/docs
 ```
-Visit → [Swagger API Docs](https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/api/docs) 
+Visit → [Swagger API Docs](https://microbank-chi.vercel.app/api/docs) 
 
 #### Example: Register Client
 ```
