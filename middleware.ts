@@ -58,7 +58,6 @@ export async function middleware(request: NextRequest) {
     await jwtVerify(token, secret);
     return NextResponse.next();
   } catch (err) {
-    console.log("❌ Invalid token", err);
     return NextResponse.redirect(new URL("/client/login", request.url));
   }
 }

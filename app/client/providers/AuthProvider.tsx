@@ -63,7 +63,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			await refreshProfile();
 			const storedUser = JSON.parse(localStorage.getItem("user")!);
 			toast.success("Welcome back!");
-			console.log("Stored User : ",storedUser)
 			return storedUser; // 🔹 Return the user
 		} catch (err: any) {
 			// toast.error(err.message || "Invalid credentials");
