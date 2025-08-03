@@ -9,6 +9,8 @@ info:
 servers:
   - url: http://localhost:3001
     description: Local Development Server
+  - url: https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app
+    description: Production / Deployed Vercel Server
 
 paths:
   /services/client-services/auth/register:
