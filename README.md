@@ -8,6 +8,14 @@ Allows secure client registration, deposits, withdrawals, and blacklist manageme
 🌐 Live Demo: [Microbank on Vercel](https://microbank-3dv1qa7jd-liquid-dres-projects.vercel.app/)
 💻 Source Code: [GitHub Repo](https://github.com/liquid-dre/microbank.git)
 
+### Getting Started
+
+Admin credentials
+```
+email : admin@gmail.com
+password: Password01
+```
+
 ### Features
 
 #### Client Service
@@ -135,4 +143,36 @@ Visit → [Swagger API Docs](https://microbank-3dv1qa7jd-liquid-dres-projects.ve
 
 - Landing page
     ![alt text](image.png)
-    
+    ![alt text](image-1.png)
+    ![alt text](image-2.png)
+
+- Register page
+    ![alt text](image-3.png)    
+
+- Login page
+    ![alt text](image-4.png)
+
+- Admin dashboard page
+    ![alt text](image-5.png)
+
+- Edit profile page
+    ![alt text](image-6.png)
+
+- Client dashboard
+    ![alt text](image-7.png)
+
+    ![alt text](image-8.png)
+
+    ![alt text](image-9.png)
+
+    - Deposit page
+    ![alt text](image-10.png)
+
+    - Withdraw page (25% selected)
+    ![alt text](image-11.png)
+
+    - Withdrawal validation
+    ![alt text](image-12.png)
+
+- Blacklisted user dashboard
+    ![alt text](image-13.png)
