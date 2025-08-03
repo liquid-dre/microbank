@@ -23,10 +23,12 @@ export default function LoginPage() {
 			// Redirect based on role
 			if (loggedInUser?.isAdmin) {
 				router.push("/client/admin/dashboard");
-			} else {
+			} else if (loggedInUser?.name) {
 				router.push("/client/dashboard");
+			} else {
+				router.push("/client/login");
 			}
-		} finally {
+		}finally {
 			setLoading(false);
 		}
 	};

@@ -254,7 +254,7 @@ export default function ClientDashboard() {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, ease: "easeOut" }}
 					whileHover={{ scale: 1.02 }}
-					className="relative p-6 bg-white border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
+					className="relative p-6 bg-black border border-gray-200 rounded-2xl shadow-sm transition-shadow duration-300"
 				><p className="text-red-600 text-xl font-bold">Blacklisted</p>
 						<p className="text-gray-100 text-sm mt-2 text-center">
 							Your account is currently restricted from making transactions.
