@@ -24,7 +24,7 @@ export default function LoginPage() {
 			if (loggedInUser?.isAdmin) {
 				router.push("/client/admin/dashboard");
 			} else {
-				router.push("/client/dashboard");
+				router.push("/");
 			}
 		} finally {
 			setLoading(false);
