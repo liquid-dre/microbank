@@ -3,10 +3,14 @@ import { cookies } from "next/headers";
 import { verify } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-	// 	GET: Return all clients
-	// 	POST: Toggle blacklist status of a client
-	// 	Only admins allowed
-
+// 	GET: Return all clients
+// 	POST: Toggle blacklist status of a client
+// 	Only admins allowed
+interface JwtPayload {
+	id: string;
+	iat?: number;
+	exp?: number;
+}
 
 export async function GET() {
 	const token = (await cookies()).get("token")?.value;
@@ -14,7 +18,7 @@ export async function GET() {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
 	try {
-		const payload: any = verify(token, process.env.JWT_SECRET!);
+		const payload = verify(token, process.env.JWT_SECRET!) as JwtPayload;
 		const admin = await prisma.client.findUnique({ where: { id: payload.id } });
 
 		if (!admin?.isAdmin)
@@ -32,6 +36,7 @@ export async function GET() {
 
 		return NextResponse.json(clients);
 	} catch (err) {
+		console.error(err);
 		return NextResponse.json({ error: "Invalid token" }, { status: 401 });
 	}
 }
@@ -42,7 +47,7 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
 	try {
-		const payload: any = verify(token, process.env.JWT_SECRET!);
+		const payload = verify(token, process.env.JWT_SECRET!) as JwtPayload;
 		const admin = await prisma.client.findUnique({ where: { id: payload.id } });
 
 		if (!admin?.isAdmin)
@@ -66,6 +71,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({ success: true, updated });
 	} catch (err) {
+		console.error(err);
 		return NextResponse.json(
 			{ error: "Invalid token or server error" },
 			{ status: 500 }

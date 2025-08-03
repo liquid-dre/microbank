@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { authApi } from "@/app/client/lib/api";  
+import { authApi } from "@/app/client/lib/api";
 import type { User } from "@/app/client/lib/types";
 import { toast } from "sonner";
 
@@ -64,9 +64,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			const storedUser = JSON.parse(localStorage.getItem("user")!);
 			toast.success("Welcome back!");
 			return storedUser; // 🔹 Return the user
-		} catch (err: any) {
-			// toast.error(err.message || "Invalid credentials");
-			throw err;
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				toast.error(err.message || "Failed to login");
+			} else {
+				toast.error("Failed to login");
+			}
 		}
 	};
 
@@ -81,9 +84,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 			await refreshProfile();
 			toast.success("Account created! Welcome aboard 🚀");
-		} catch (err: any) {
-			toast.error(err.message || "Registration failed");
-			throw err;
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				toast.error(err.message || "Registration failed");
+			} else {
+				toast.error("Registration failed");
+			}
 		}
 	};
 

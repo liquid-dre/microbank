@@ -1,18 +1,5 @@
-import { NextRequest } from "next/server";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
-import path from "path";
-import { Readable } from "stream";
-
-// Load swagger YAML
-const swaggerDocument = YAML.load(
-	path.join(process.cwd(), "public/docs/swagger.yaml")
-);
-
-export async function GET(req: NextRequest) {
-	// Render the Swagger HTML manually using swagger-ui-dist
-	const swaggerUiAssetPath = require("swagger-ui-dist").absolutePath();
-	const html = `
+export async function GET() {
+  const html = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -26,7 +13,7 @@ export async function GET(req: NextRequest) {
       <script>
         window.onload = function() {
           window.ui = SwaggerUIBundle({
-            url: '/docs/swagger.yaml',
+            url: '/docs/swagger.yaml', // Served from public folder
             dom_id: '#swagger-ui',
           });
         }
@@ -34,7 +21,8 @@ export async function GET(req: NextRequest) {
     </body>
     </html>
   `;
-	return new Response(Readable.from([html]) as any, {
-		headers: { "Content-Type": "text/html" },
-	});
+
+  return new Response(html, {
+    headers: { "Content-Type": "text/html" },
+  });
 }

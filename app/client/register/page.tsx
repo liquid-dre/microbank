@@ -7,7 +7,6 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { authApi } from "@/app/client/lib/api";
 import { useRouter } from "next/navigation";
-import SkeletonBlock from "@/components/layout/SkeletonBlock";
 import { useAuth } from "../providers/AuthProvider";
 
 export default function RegisterPage() {

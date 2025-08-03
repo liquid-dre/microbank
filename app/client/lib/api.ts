@@ -37,14 +37,19 @@ async function request<T>(
 			throw new Error(errorMsg || "Request failed");
 		}
 
-		const data = await res.json();
+		const data: T = await res.json();
 
 		if (showToast && successMessage) toast.success(successMessage);
 
 		return data;
-	} catch (err: any) {
-		if (showToast) toast.error(err.message || "Something went wrong");
-		throw err;
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			if (showToast) toast.error(err.message || "Something went wrong");
+			throw err;
+		} else {
+			if (showToast) toast.error("Something went wrong");
+			throw new Error("Unknown error");
+		}
 	}
 }
 
@@ -55,26 +60,26 @@ export const api = {
 	get: <T>(url: string, showToast = false, successMessage?: string) =>
 		request<T>(url, {}, showToast, successMessage),
 
-	post: <T>(
+	post: <TResponse, TBody extends object>(
 		url: string,
-		body: any,
+		body: TBody,
 		showToast = false,
 		successMessage?: string
 	) =>
-		request<T>(
+		request<TResponse>(
 			url,
 			{ method: "POST", body: JSON.stringify(body) },
 			showToast,
 			successMessage
 		),
 
-	put: <T>(
+	put: <TResponse, TBody extends object>(
 		url: string,
-		body: any,
+		body: TBody,
 		showToast = false,
 		successMessage?: string
 	) =>
-		request<T>(
+		request<TResponse>(
 			url,
 			{ method: "PUT", body: JSON.stringify(body) },
 			showToast,
@@ -90,7 +95,10 @@ export const api = {
  */
 export const authApi = {
 	register: (name: string, email: string, password: string) =>
-		api.post<{ token: string }>(
+		api.post<
+			{ token: string },
+			{ name: string; email: string; password: string }
+		>(
 			"/services/client-services/auth/register",
 			{ name, email, password },
 			true,
@@ -98,7 +106,7 @@ export const authApi = {
 		),
 
 	login: (email: string, password: string) =>
-		api.post<{ token: string }>(
+		api.post<{ token: string }, { email: string; password: string }>(
 			"/services/client-services/auth/login",
 			{ email, password },
 			true,
@@ -111,10 +119,10 @@ export const authApi = {
 export const adminApi = {
 	listClients: () => api.get<User[]>("/services/client-services/admin/clients"),
 	toggleBlacklist: async (clientId: string) => {
-		const res = await api.post<{ success: boolean; updated: User }>(
-			"/services/client-services/admin/clients",
-			{ clientId }
-		);
+		const res = await api.post<
+			{ success: boolean; updated: User },
+			{ clientId: string }
+		>("/services/client-services/admin/clients", { clientId });
 		return res.updated;
 	},
 };
@@ -122,19 +130,18 @@ export const adminApi = {
 /**
  * 💰 Transactions API
  */
-
 export const transactionApi = {
 	list: () =>
 		api.get<BalanceResponse>("/services/banking-services/transactions"),
 	deposit: (amount: number) =>
-		api.post<Transaction>(
+		api.post<Transaction, { type: string; amount: number }>(
 			"/services/banking-services/transactions",
 			{ type: "DEPOSIT", amount },
 			true,
 			"Deposit successful!"
 		),
 	withdraw: (amount: number) =>
-		api.post<Transaction>(
+		api.post<Transaction, { type: string; amount: number }>(
 			"/services/banking-services/transactions",
 			{ type: "WITHDRAWAL", amount },
 			true,

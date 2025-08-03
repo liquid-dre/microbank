@@ -7,13 +7,19 @@ import { prisma } from '@/app/services/client-services/prisma/prisma';
 	// 	Decode and verify
 	// 	Return user’s profile from DB
 
+interface JwtPayload {
+	id: string;
+	iat?: number;
+	exp?: number;
+}
+
 export async function GET() {
   const token = (await cookies()).get('token')?.value;
 
   if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const payload: any = verify(token, process.env.JWT_SECRET!);
+    const payload = verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const user = await prisma.client.findUnique({
       where: { id: payload.id },
@@ -31,6 +37,7 @@ export async function GET() {
 
     return NextResponse.json(user);
   } catch (err) {
+    console.error(err)
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
   }
 }

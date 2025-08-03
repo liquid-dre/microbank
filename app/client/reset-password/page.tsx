@@ -12,8 +12,6 @@ export default function ResetPasswordPage() {
 
   const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
 
     try {
       setLoading(true)

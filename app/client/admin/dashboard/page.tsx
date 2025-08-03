@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import { adminApi, User } from "@/app/client/lib/api";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,10 +47,12 @@ export default function AdminDashboard() {
   );
 
   // Sorting logic
+type SortableValue = string | number | boolean | null | undefined;
+
   const sorted = useMemo(() => {
     if (!sortConfig) return filtered;
     const { key, direction } = sortConfig;
-    const normalize = (val: any) => {
+    const normalize = (val: SortableValue) => {
       if (val == null) return '';
       if (typeof val === 'boolean') return val ? '1' : '0';
       return String(val).toLowerCase();

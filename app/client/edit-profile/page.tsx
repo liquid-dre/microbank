@@ -31,8 +31,12 @@ export default function EditProfilePage() {
 
 			await refreshProfile();
 			router.push("/client/dashboard");
-		} catch (err: any) {
-			toast.error(err.message || "Failed to update profile");
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				toast.error(err.message || "Failed to update profile");
+			} else {
+				toast.error("Failed to update profile");
+			}
 		} finally {
 			setLoading(false);
 		}
