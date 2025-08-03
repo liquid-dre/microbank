@@ -95,10 +95,37 @@ Create a .env file in the project root:
     NEXT_PUBLIC_SUPABASE_ANON_KEY="<your-anon-key>"
 ```
 
+    Follow these steps to get each value:
+    
+1. Create a database on Supabase
+
+2. Get DATABASE_URL and DIRECT_URL
+	1.	Go to Supabase and open your project.
+	2.	Navigate to Project Settings → Connect (It will be right at the top of your screen)
+	3.	Select ORMs and make sure Prisma is selected
+	4.	Copy the DATABASE_URL and DIRECT_URL.
+
+⸻
+
+3. Get SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY
+	1.	Navigate to Project Settings → API Keys.
+	2.	Select "Legacy API Keys"
+    3.  Scroll to Service Role Key (⚠ keep this secret; it has admin privileges).
+	4.	Copy the keys
+
+4. Get NEXT_PUBLIC_SUPABASE_URL 
+	1.	Go to Supabase and open your project.
+	2.	Navigate to Project Overview
+    3. Scroll down to "Project URL"
+    4. Copy the url
+
 4️⃣ Run Database Migrations
 ```
     npx prisma migrate dev
 ```
+This will:
+	1.	Create your local migration files under prisma/migrations.
+	2.	Apply the schema changes to your connected database.
 
 5️⃣ Run the App Locally
 ```
