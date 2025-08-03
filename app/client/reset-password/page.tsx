@@ -76,7 +76,7 @@ export default function ResetPasswordPage() {
 
         <p className="text-center text-gray-600 text-sm mt-4">
           Remember your password?{' '}
-          <Link href="/" className="relative group font-medium text-[var(--color-primary)]">
+          <Link href="/client/login" className="relative group font-medium text-[var(--color-primary)]">
             Login
             <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[var(--color-accent)] transition-all group-hover:w-full"></span>
           </Link>

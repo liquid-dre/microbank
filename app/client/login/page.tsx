@@ -99,7 +99,7 @@ export default function LoginPage() {
 					{/* Bottom Links */}
 					<div className="flex justify-between text-sm mt-2">
 						<Link
-							href="/register"
+							href="/client/register"
 							className="relative inline-block text-[color:var(--color-accent)] font-medium group"
 						>
 							Register here
@@ -109,7 +109,7 @@ export default function LoginPage() {
 							></span>
 						</Link>
 						<Link
-							href="/reset-password"
+							href="/client/reset-password"
 							className="text-[color:var(--color-primary)] hover:underline"
 						>
 							Forgot Password?
