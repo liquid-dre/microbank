@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 A full-stack microbanking platform built with Next.js, Prisma, Supabase, and JWT.
 Allows secure client registration, deposits, withdrawals, and blacklist management with a clean admin panel and Swagger API documentation.
 
-🌐 Live Demo: [Microbank on Vercel](https://microbank-3dv1qa7jd-liquid-dres-projects.vercel.app/)
+🌐 Live Demo: [Microbank on Vercel](https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/)
 💻 Source Code: [GitHub Repo](https://github.com/liquid-dre/microbank.git)
 
 ### Getting Started
@@ -111,9 +111,9 @@ Visit → [localhost](http://localhost:3001)
 
 Interactive Swagger docs:
 ```
-    https://microbank-3dv1qa7jd-liquid-dres-projects.vercel.app/api/docs
+    https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/api/docs
 ```
-Visit → [Swagger API Docs](https://microbank-3dv1qa7jd-liquid-dres-projects.vercel.app/api/docs) 
+Visit → [Swagger API Docs](https://microbank-bbkzmzj2k-liquid-dres-projects.vercel.app/api/docs) 
 
 #### Example: Register Client
 ```
@@ -176,3 +176,26 @@ Visit → [Swagger API Docs](https://microbank-3dv1qa7jd-liquid-dres-projects.ve
 
 - Blacklisted user dashboard
     ![alt text](image-13.png)
+
+
+### 🧠 Developer Thoughts
+
+I wanted to share a bit about my journey building this project:
+
+I had never worked with JWT directly before (I usually rely on Clerk for personal projects), so that was a bit challenging at first.
+But if there’s anything I believe in, it’s my ability to see a problem through—and, of course, read documentation 🤣.
+	•	Saturday: I started the project in the morning, and by the time I went to sleep, the core functionalities were done.
+	•	Sunday: I realized I had misread the required project structure, which meant restructuring imports and cleaning up my backend code.
+	•	This turned out to be a blessing in disguise, as I got to refactor my lib/api.ts for cleaner and easier API calls and made a bunch of styling changes just to put my own personal touch and favourite colour (green)
+
+I also reflected on real-world practicality:
+
+Letting users just pick any deposit amount felt unrealistic without a verification step to ensure they actually had the funds.
+I almost redesigned the project to focus on withdrawals & transfers instead, but in the end I stuck to the brief—imagining a system like Apple Pay or a linked e-wallet handling the actual funds.
+
+The short timeframe was actually exhilarating:
+	•	Friday night: Designed my screens and DB schema
+	•	Saturday & Sunday: Built and refined the core app
+	•	Deployment: Of course, everything went haywire at first 😅, but debugging and fixing that was its own kind of fun.
+
+Overall, I enjoyed every part of the process, and I hope the effort and care I put into this project comes through to anyone who inspects the repo or tries the app.
