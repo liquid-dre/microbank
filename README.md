@@ -177,6 +177,8 @@ Visit → [Swagger API Docs](https://microbank-bbkzmzj2k-liquid-dres-projects.ve
 - Blacklisted user dashboard
     ![alt text](image-13.png)
 
+- Page not found
+    ![alt text](image-14.png)
 
 ### 🧠 Developer Thoughts
 
