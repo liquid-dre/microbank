@@ -110,31 +110,36 @@ export const authApi = {
 
 export const adminApi = {
 	listClients: () => api.get<User[]>("/services/client-services/admin/clients"),
-	toggleBlacklist: (clientId: string) =>
-		api.post<User>(`/services/client-services/admin/clients`, { clientId }),
+	toggleBlacklist: async (clientId: string) => {
+		const res = await api.post<{ success: boolean; updated: User }>(
+			"/services/client-services/admin/clients",
+			{ clientId }
+		);
+		return res.updated;
+	},
 };
-
 
 /**
  * 💰 Transactions API
  */
 
 export const transactionApi = {
-  list: () => api.get<BalanceResponse>("/services/banking-services/transactions"),
-  deposit: (amount: number) =>
-    api.post<Transaction>(
-      "/services/banking-services/transactions",
-      { type: "DEPOSIT", amount },
-      true,
-      "Deposit successful!"
-    ),
-  withdraw: (amount: number) =>
-    api.post<Transaction>(
-      "/services/banking-services/transactions",
-      { type: "WITHDRAWAL", amount },
-      true,
-      "Withdrawal successful!"
-    ),
+	list: () =>
+		api.get<BalanceResponse>("/services/banking-services/transactions"),
+	deposit: (amount: number) =>
+		api.post<Transaction>(
+			"/services/banking-services/transactions",
+			{ type: "DEPOSIT", amount },
+			true,
+			"Deposit successful!"
+		),
+	withdraw: (amount: number) =>
+		api.post<Transaction>(
+			"/services/banking-services/transactions",
+			{ type: "WITHDRAWAL", amount },
+			true,
+			"Withdrawal successful!"
+		),
 };
 
 /**
