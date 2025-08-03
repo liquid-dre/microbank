@@ -1,5 +1,5 @@
 import { Transaction as PrismaTransaction } from "@prisma/client";
-import { prisma } from "@/app/services/client-services/prisma/prisma";
+import { prisma } from "@/prisma/prisma";
 
 export async function getUserTransactions(userId: string) {
 	return prisma.transaction.findMany({
