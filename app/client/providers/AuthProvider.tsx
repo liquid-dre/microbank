@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { authApi, User } from "@/lib/api";
+import { authApi } from "@/app/client/lib/api";  
+import type { User } from "@/app/client/lib/types";
 import { toast } from "sonner";
 
 type AuthContextType = {
@@ -62,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			await refreshProfile();
 			const storedUser = JSON.parse(localStorage.getItem("user")!);
 			toast.success("Welcome back!");
+			console.log("Stored User : ",storedUser)
 			return storedUser; // 🔹 Return the user
 		} catch (err: any) {
 			// toast.error(err.message || "Invalid credentials");

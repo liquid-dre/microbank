@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { signJwt } from '@/lib/auth';
+import { signJwt } from '@/app/client/lib/auth';
 
 // Api to Create User and Return JWT 
 

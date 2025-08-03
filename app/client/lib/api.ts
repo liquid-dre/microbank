@@ -1,4 +1,10 @@
 import { toast } from "sonner";
+import type {
+	User,
+	Transaction,
+	BalanceResponse,
+	TransactionResponse,
+} from "./types";
 
 /**
  * Get JWT token from localStorage
@@ -6,12 +12,12 @@ import { toast } from "sonner";
 export const getToken = () => localStorage.getItem("token");
 
 /**
- * Central request handler for all HTTP requests
+ * Central request handler
  */
 async function request<T>(
 	url: string,
 	options: RequestInit = {},
-	showToast: boolean = false,
+	showToast = false,
 	successMessage?: string
 ): Promise<T> {
 	const token = getToken();
@@ -33,9 +39,7 @@ async function request<T>(
 
 		const data = await res.json();
 
-		if (showToast && successMessage) {
-			toast.success(successMessage);
-		}
+		if (showToast && successMessage) toast.success(successMessage);
 
 		return data;
 	} catch (err: any) {
@@ -45,7 +49,7 @@ async function request<T>(
 }
 
 /**
- * Generic API calls
+ * Generic API wrapper
  */
 export const api = {
 	get: <T>(url: string, showToast = false, successMessage?: string) =>
@@ -87,7 +91,7 @@ export const api = {
 export const authApi = {
 	register: (name: string, email: string, password: string) =>
 		api.post<{ token: string }>(
-			"/api/auth/register",
+			"/services/client-services/auth/register",
 			{ name, email, password },
 			true,
 			"Registration successful"
@@ -95,68 +99,45 @@ export const authApi = {
 
 	login: (email: string, password: string) =>
 		api.post<{ token: string }>(
-			"/api/auth/login",
+			"/services/client-services/auth/login",
 			{ email, password },
 			true,
 			"Login successful"
 		),
 
-	profile: () => api.get<User>("/api/profile"),
+	profile: () => api.get<User>("/services/client-services/profile"),
 };
+
+export const adminApi = {
+	listClients: () => api.get<User[]>("/services/client-services/admin/clients"),
+	toggleBlacklist: (clientId: string) =>
+		api.post<User>(`/services/client-services/admin/clients`, { clientId }),
+};
+
 
 /**
  * 💰 Transactions API
  */
+
 export const transactionApi = {
-	list: () => api.get<Transaction>("/api/transactions"),
-	deposit: (amount: number) =>
-		api.post<Transaction>(
-			"/api/transactions",
-			{ type: "DEPOSIT", amount },
-			true,
-			"Deposit successful!"
-		),
-	withdraw: (amount: number) =>
-		api.post<Transaction>(
-			"/api/transactions",
-			{ type: "WITHDRAWAL", amount },
-			true,
-			"Withdrawal successful!"
-		),
+  list: () => api.get<BalanceResponse>("/services/banking-services/transactions"),
+  deposit: (amount: number) =>
+    api.post<Transaction>(
+      "/services/banking-services/transactions",
+      { type: "DEPOSIT", amount },
+      true,
+      "Deposit successful!"
+    ),
+  withdraw: (amount: number) =>
+    api.post<Transaction>(
+      "/services/banking-services/transactions",
+      { type: "WITHDRAWAL", amount },
+      true,
+      "Withdrawal successful!"
+    ),
 };
 
 /**
- * 🛠️ Admin API
+ * ✅ Re-export types for legacy imports
  */
-export const adminApi = {
-	listClients: () => api.get<User[]>("/api/admin/clients"),
-	toggleBlacklist: (clientId: string) =>
-		api.post<User>(
-			"/api/admin/clients",
-			{ clientId },
-			true,
-			"Client blacklist status updated"
-		),
-};
-
-/**
- * Types (keep in sync with Prisma schema)
- */
-export type User = {
-	id: string;
-	name: string;
-	email: string;
-	isAdmin: boolean;
-	isBlacklisted: boolean;
-	avatar?: string | null;
-};
-
-export type Transaction = {
-	id: string;
-	userId: string;
-	type: "DEPOSIT" | "WITHDRAWAL";
-	amount: number;
-	createdAt: string;
-	balance: number;
-	transactions: Transaction[];
-};
+export type { User, Transaction, BalanceResponse, TransactionResponse };

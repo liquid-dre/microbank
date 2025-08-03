@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Mail, Lock, LogIn } from "lucide-react";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/app/client/providers/AuthProvider";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -21,9 +21,9 @@ export default function LoginPage() {
 
 			// Redirect based on role
 			if (loggedInUser?.isAdmin) {
-				router.push("/admin/dashboard");
+				router.push("/client/admin/dashboard");
 			} else {
-				router.push("/dashboard");
+				router.push("/client/dashboard");
 			}
 		} finally {
 			setLoading(false);

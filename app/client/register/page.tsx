@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { authApi } from "@/lib/api";
+import { authApi } from "@/app/client/lib/api";
 import { useRouter } from "next/navigation";
 import SkeletonBlock from "@/components/layout/SkeletonBlock";
 

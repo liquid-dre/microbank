@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminApi, User } from "@/lib/api";
+import { adminApi, User } from "@/app/client/lib/api";
 import { Switch } from "@/components/ui/switch"; // Shadcn switch
 import { toast } from "sonner";
 

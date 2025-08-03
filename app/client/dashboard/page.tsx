@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { transactionApi, Transaction } from "@/lib/api";
-import { useAuth } from "@/providers/AuthProvider";
+import { transactionApi, Transaction } from "@/app/client/lib/api";
+import { useAuth } from "@/app/client/providers/AuthProvider";
 import {
 	ArrowDownCircle,
 	ArrowUpCircle,
@@ -25,7 +25,7 @@ import {
 	CommandInput,
 	CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/client/lib/utils";
 
 // Recharts
 import {

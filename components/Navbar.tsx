@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/app/client/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { LogOut, User, UserPlus } from "lucide-react";
@@ -46,7 +46,7 @@ export default function Navbar() {
 
 						{!user ? (
 							<Link
-								href="/register"
+								href="/client/register"
 								className="flex items-center gap-1 text-gray-600 hover:text-primary"
 							>
 								<UserPlus size={18} /> Register
@@ -129,7 +129,7 @@ export default function Navbar() {
 
 					{!user ? (
 						<Link
-							href="/register"
+							href="/client/register"
 							className="block text-gray-600 hover:text-primary py-2"
 						>
 							<UserPlus size={18} className="inline mr-1" /> Register

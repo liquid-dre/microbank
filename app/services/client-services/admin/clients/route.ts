@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/services/client-services/prisma/prisma";
 import { cookies } from "next/headers";
 import { verify } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";

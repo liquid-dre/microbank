@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  title: MicroBanking API
+  version: 1.0.0
+  description: >
+    API for client management, authentication, and banking transactions.
+    All endpoints require JWT-based authentication via HttpOnly cookie `token`.
+
+servers:
+  - url: http://localhost:3001
+    description: Local Development Server
+
+paths:
+  /services/client-services/auth/register:
+    post:
+      summary: Register a new client
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, name]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '400':
+          description: User already exists
+
+  /services/client-services/auth/login:
+    post:
+      summary: Login and get JWT
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '401':
+          description: Invalid credentials
+
+  /services/client-services/auth/update:
+    patch:
+      summary: Update client profile
+      tags: [Auth]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated successfully
+        '400':
+          description: No valid fields provided
+        '401':
+          description: Unauthorized or invalid token
+
+  /services/client-services/profile:
+    get:
+      summary: Get logged-in client profile
+      tags: [Profile]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Client profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  email: { type: string }
+                  name: { type: string }
+                  isAdmin: { type: boolean }
+                  isBlacklisted: { type: boolean }
+                  createdAt: { type: string, format: date-time }
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+
+  /services/client-services/admin/clients:
+    get:
+      summary: Get all clients (Admin only)
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: string }
+                    name: { type: string }
+                    email: { type: string }
+                    isBlacklisted: { type: boolean }
+                    createdAt: { type: string, format: date-time }
+        '403':
+          description: Forbidden (not admin)
+        '401':
+          description: Unauthorized
+
+    post:
+      summary: Toggle blacklist status of a client
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [clientId]
+              properties:
+                clientId:
+                  type: string
+      responses:
+        '200':
+          description: Blacklist status updated
+        '404':
+          description: Client not found
+        '403':
+          description: Forbidden
+        '401':
+          description: Unauthorized
+
+  /services/banking-services/transactions:
+    get:
+      summary: Get user transactions and balance
+      tags: [Transactions]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Balance and transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        type: { type: string, enum: [DEPOSIT, WITHDRAWAL] }
+                        amount: { type: number }
+                        createdAt: { type: string, format: date-time }
+        '401':
+          description: Unauthorized
+
+    post:
+      summary: Create a new transaction
+      tags: [Transactions]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, amount]
+              properties:
+                type:
+                  type: string
+                  enum: [DEPOSIT, WITHDRAWAL]
+                amount:
+                  type: number
+      responses:
+        '200':
+          description: Transaction successful
+        '400':
+          description: Bad Request (invalid type or insufficient funds)
+        '403':
+          description: Blacklisted user
+        '401':
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
