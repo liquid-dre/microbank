@@ -8,10 +8,12 @@ import { toast } from "sonner";
 import { authApi } from "@/app/client/lib/api";
 import { useRouter } from "next/navigation";
 import SkeletonBlock from "@/components/layout/SkeletonBlock";
+import { useAuth } from "../providers/AuthProvider";
 
 export default function RegisterPage() {
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+	const { login } = useAuth();
 
 	const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -23,8 +25,12 @@ export default function RegisterPage() {
 		try {
 			setLoading(true);
 			await authApi.register(name, email, password);
+
+			// ✅ Auto-login after registration
+			await login(email, password);
+
 			toast.success("Registration successful! Redirecting...");
-			router.push("/");
+			router.push("/client/dashboard");
 		} catch {
 			toast.error("Registration failed. Try again.");
 		} finally {
@@ -88,26 +94,78 @@ export default function RegisterPage() {
 						/>
 					</div>
 
-					<button
+					<motion.button
 						type="submit"
 						disabled={loading}
-						className="flex items-center justify-center gap-2 w-full py-2 
-                       bg-[var(--color-primary)] hover:bg-[var(--color-accent)] 
-                       text-white rounded-lg transition-all duration-300"
+						whileTap={!loading ? { scale: 0.97 } : {}}
+						animate={
+							loading
+								? {
+										background: [
+											"var(--color-primary)",
+											"var(--color-accent)",
+											"var(--color-primary)",
+										],
+									}
+								: {}
+						}
+						transition={
+							loading
+								? {
+										background: {
+											duration: 2,
+											repeat: Infinity,
+											repeatType: "loop",
+										},
+									}
+								: {}
+						}
+						className={`relative overflow-hidden flex items-center justify-center gap-2 w-full py-2 rounded-lg text-white transition-all duration-300
+        ${loading ? "cursor-not-allowed" : "bg-[var(--color-primary)] hover:bg-[var(--color-accent)]"}
+      `}
 					>
 						{loading ? (
-							<SkeletonBlock rows={3} width="100%" height="40px" />
+							<div className="flex items-center gap-2">
+								
+								{/* Text + bouncing dots */}
+								<div className="flex items-center gap-1 font-medium">
+									<span>Registering</span>
+									<div className="flex items-end h-4">
+										{[0, 1, 2].map((i) => (
+											<motion.span
+												key={i}
+												className="mx-0.5 w-1 h-1 bg-white rounded-full"
+												animate={{ y: [0, -6, 0] }}
+												transition={{
+													repeat: Infinity,
+													duration: 0.6,
+													delay: i * 0.2,
+												}}
+											/>
+										))}
+									</div>
+								</div>
+							</div>
 						) : (
-							<UserPlus className="w-5 h-5" />
+							<>
+								<motion.span
+									className="w-5 h-5"
+									initial={{ rotate: 0 }}
+									whileHover={{ rotate: 15, scale: 1.1 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<UserPlus />
+								</motion.span>
+								<span className="font-medium">Register</span>
+							</>
 						)}
-						Register
-					</button>
+					</motion.button>
 				</form>
 
 				<p className="text-center text-gray-600 text-sm mt-4">
 					Already have an account?{" "}
 					<Link
-						href="/"
+						href="/client/login"
 						className="relative group font-medium text-[var(--color-accent)]"
 					>
 						Login here

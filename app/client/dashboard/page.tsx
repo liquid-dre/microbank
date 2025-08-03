@@ -28,7 +28,7 @@ import {
 	CommandInput,
 	CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/app/client/lib/utils";
+import { cn } from "@/lib/utils";
 
 // Recharts
 import {
